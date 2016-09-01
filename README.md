@@ -20,7 +20,7 @@ MATLAB 7.
 For a more detailed introduction to the capabilities and use of the 
 GA Toolbox, please refer to the two introductory papers and the
 Toolbox User's Guide, all of which are available at the GA Toolbox
-homepage at http://www.shef.ac.uk/acse/research/ecrg/gat.html.
+homepage at http://codem.group.shef.ac.uk/index.php/ga-toolbox.
 
 The GA Toolbox is copyright the original authors and The University 
 of Sheffield, and is published here under the GNU General Public 
