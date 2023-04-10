@@ -1,3 +1,4 @@
+function FitnV = ranking(ObjV, RFun, SUBPOP)
 % RANKING.M      (RANK-based fitness assignment)
 %
 % This function performs ranking of individuals.
@@ -38,23 +39,22 @@
 % History:    01.03.94     non-linear ranking
 %             10.03.94     multiple populations
 %             21.01.03     updated for MATLAB v6 by Alex Shenfield
-
-function FitnV = ranking(ObjV, RFun, SUBPOP)
+%             24.02.10     updated for MATLAB R2008b by Richard Crozier
 
 % Identify the vector size (Nind)
-   [Nind,~] = size(ObjV);
+   [Nind,ans] = size(ObjV);
 
    if nargin < 2, RFun = []; end
    if nargin > 1, if isnan(RFun), RFun = []; end, end
-   if prod(size(RFun)) == 2,
+   if numel(RFun) == 2,
       if RFun(2) == 1, NonLin = 1;
       elseif RFun(2) == 0, NonLin = 0; 
       else error('Parameter for ranking method must be 0 or 1'); end
       RFun = RFun(1);
       if isnan(RFun), RFun = 2; end
-   elseif prod(size(RFun)) > 2,
-      if prod(size(RFun)) ~= Nind, error('ObjV and RFun disagree'); end
-   elseif prod(size(RFun)) < 2, NonLin = 0;   
+   elseif numel(RFun) > 2,
+      if numel(RFun) ~= Nind, error('ObjV and RFun disagree'); end
+   elseif numel(RFun) < 2, NonLin = 0;   
    end
 
    if nargin < 3, SUBPOP = 1; end
@@ -71,7 +71,7 @@ function FitnV = ranking(ObjV, RFun, SUBPOP)
    if isempty(RFun),
       % linear ranking with selective pressure 2
          RFun = 2*[0:Nind-1]'/(Nind-1);
-   elseif prod(size(RFun)) == 1
+   elseif numel(RFun) == 1
       if NonLin == 1,
          % non-linear ranking
          if RFun(1) < 1, error('Selective pressure must be greater than 1');
@@ -81,7 +81,7 @@ function FitnV = ranking(ObjV, RFun, SUBPOP)
          RFun = RFun / sum(RFun) * Nind;
       else
          % linear ranking with SP between 1 and 2
-         if (RFun(1) < 1 | RFun(1) > 2),
+         if (RFun(1) < 1 || RFun(1) > 2),
             error('Selective pressure for linear ranking must be between 1 and 2');
          end
          RFun = 2-RFun + 2*(RFun-1)*[0:Nind-1]'/(Nind-1);
@@ -98,7 +98,7 @@ for irun = 1:SUBPOP,
       NaNix = isnan(ObjVSub);
       Validix = find(~NaNix);
    % ... and sort only numeric values (smaller is better).
-      [~,ix] = sort(-ObjVSub(Validix));
+      [ans,ix] = sort(-ObjVSub(Validix));
 
    % Now build indexing vector assuming NaN are worse than numbers,
    % (including Inf!)...
@@ -115,7 +115,7 @@ for irun = 1:SUBPOP,
       end
 
    % Finally, return unsorted vector.
-      [~,uix] = sort(ix);
+      [ans,uix] = sort(ix);
       FitnVSub = FitnVSub(uix);
 
    % Add FitnVSub to FitnV

@@ -1,3 +1,4 @@
+function NewChrom = mut(OldChrom,Pm,BaseV)
 % MUT.m
 %
 % This function takes the representation of the current population,
@@ -30,8 +31,6 @@
 % Date: 25-Jan-94
 %
 % Tested under MATLAB v6 by Alex Shenfield (21-Jan-03)
-
-function NewChrom = mut(OldChrom,Pm,BaseV)
 
 % get population size (Nind) and chromosome length (Lind)
 [Nind, Lind] = size(OldChrom) ;

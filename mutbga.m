@@ -104,8 +104,17 @@ function NewChrom = mutbga(OldChrom, FieldDR, MutOpt);
    NewChrom = OldChrom + Range .* Delta;
 
 % Ensure variables boundaries, compare with lower and upper boundaries
-   NewChrom = max(rep(FieldDR(1,:),[Nind 1]), NewChrom);
-   NewChrom = min(rep(FieldDR(2,:),[Nind 1]), NewChrom);
+%     Bounds = repmat(FieldDR(1,:),[Nind 1]);
+%     inds = find(NewChrom>Bounds);
+%     NewChrom(inds) = Bounds(inds);
+%     
+%     Bounds = repmat(FieldDR(2,:),[Nind 1]);
+%     inds = find(NewChrom<Bounds);
+%     NewChrom(inds) = Bounds(inds);
+    
+%   Original Code
+   NewChrom = max(repmat(FieldDR(1,:),[Nind 1]), NewChrom);
+   NewChrom = min(repmat(FieldDR(2,:),[Nind 1]), NewChrom);
 
 
 % End of function

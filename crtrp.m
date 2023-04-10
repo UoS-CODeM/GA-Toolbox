@@ -31,7 +31,8 @@ function Chrom = crtrp(Nind,FieldDR);
 
 % Check parameter consistency
    if nargin < 2, error('parameter FieldDR missing'); end
-   if nargin > 2, nargin = 2; end
+   % ORIGINAL: if nargin > 2, nargin = 2; end
+   if nargin > 2, error('too many input parameters'); end
 
    [mN, nN] = size(Nind);
    [mF, Nvar] = size(FieldDR);

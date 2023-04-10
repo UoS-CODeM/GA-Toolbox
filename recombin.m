@@ -1,3 +1,4 @@
+function NewChrom = recombin2(REC_F, Chrom, RecOpt, SUBPOP, REC_F_ARGS)
 % RECOMBIN.M       (RECOMBINation high-level function)
 %
 % This function performs recombination between pairs of individuals
@@ -28,8 +29,6 @@
 %             22.01.03     tested under MATLAB v6 by Alex Shenfield
 %                          (NOTE : doesn't work with low level recmut.m)
 
-function NewChrom = recombin(REC_F, Chrom, RecOpt, SUBPOP);
-
 % Check parameter consistency
    if nargin < 2, error('Not enough input parameter'); end
 
@@ -51,15 +50,21 @@ function NewChrom = recombin(REC_F, Chrom, RecOpt, SUBPOP);
       if isempty(RecOpt), RecOpt = 0.7;
       elseif isnan(RecOpt), RecOpt = 0.7;
       elseif length(RecOpt) ~= 1, error('RecOpt must be a scalar');
-      elseif (RecOpt < 0 | RecOpt > 1), error('RecOpt must be a scalar in [0, 1]'); end
+      elseif (RecOpt < 0 || RecOpt > 1), error('RecOpt must be a scalar in [0, 1]'); end
    end
-
+   
+   % Initialize the function input arguments
+   if nargin < 5, REC_F_ARGS = {}; end
+   tempRecArgs = [{[], RecOpt}, REC_F_ARGS];
+   
 % Select individuals of one subpopulation and call low level function
    NewChrom = [];
    for irun = 1:SUBPOP,
-      ChromSub = Chrom((irun-1)*Nind+1:irun*Nind,:);  
-      NewChromSub = feval(REC_F, ChromSub, RecOpt);
+      ChromSub = Chrom((irun-1)*Nind+1:irun*Nind,:); 
+      tempRecArgs{1} = ChromSub;
+      NewChromSub = feval(REC_F, tempRecArgs{:});
       NewChrom=[NewChrom; NewChromSub];
    end
 
 % End of function
+end
