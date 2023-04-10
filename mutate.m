@@ -1,3 +1,4 @@
+function NewChrom = mutate(MUT_F, OldChrom, FieldDR, MutOpt, SUBPOP)
 % MUTATE.M       (MUTATion high-level function)
 %
 % This function takes a matrix OldChrom containing the 
@@ -37,8 +38,6 @@
 % History:    19.03.94     file created
 %             21.01.03     tested under MATLAB v6 by Alex Shenfield
 
-function NewChrom = mutate(MUT_F, OldChrom, FieldDR, MutOpt, SUBPOP);
-
 % Check parameter consistency
    if nargin < 2,  error('Not enough input parameters'); end
 
@@ -72,9 +71,11 @@ function NewChrom = mutate(MUT_F, OldChrom, FieldDR, MutOpt, SUBPOP);
    NewChrom = [];
    for irun = 1:SUBPOP,
       ChromSub = OldChrom((irun-1)*Nind+1:irun*Nind,:);  
-      if IsDiscret == 1, NewChromSub = feval(MUT_F, ChromSub, MutOpt, FieldDR);
-      elseif IsDiscret == 0, NewChromSub = feval(MUT_F, ChromSub, FieldDR, MutOpt); end
-      NewChrom=[NewChrom; NewChromSub];
+      if IsDiscret == 1 
+          NewChromSub = feval(MUT_F, ChromSub, MutOpt, FieldDR);
+      elseif IsDiscret == 0
+          NewChromSub = feval(MUT_F, ChromSub, FieldDR, MutOpt); end
+          NewChrom=[NewChrom; NewChromSub];
    end
 
 

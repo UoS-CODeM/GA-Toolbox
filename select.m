@@ -1,3 +1,4 @@
+function SelCh = select2(SEL_F, Chrom, FitnV, GGAP, SUBPOP, SEL_F_ARGS)
 % SELECT.M          (universal SELECTion)
 %
 % This function performs universal selection. The function handles
@@ -16,15 +17,17 @@
 %                if omitted 1.0 is assumed
 %    SUBPOP    - (optional) Number of subpopulations
 %                if omitted 1 subpopulation is assumed
-%
+%    SEL_F_ARGS - (optional) Additional arguments to be passed to the
+%                 selection function in the form of a cell array
 % Output parameters:
 %    SelCh     - Matrix containing the selected individuals.
 %
 % Author:     Hartmut Pohlheim
 % History:    10.03.94     file created
 %             22.01.03     tested under MATLAB v6 by Alex Shenfield
-
-function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
+%             08.03.10     modified by Richard Crozier to allow the user to
+%                          specify additional input arguments to the selection 
+%                          function
 
 % Check parameter consistency
    if nargin < 3, error('Not enough input parameter'); end
@@ -56,13 +59,19 @@ function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
 % Compute number of new individuals (to select)
    NSel=max(floor(Nind*GGAP+.5),2);
 
+   if nargin < 6, SEL_F_ARGS = {}; end
+% Initialize the selection function arguments
+   tempSelArgs = [{[], NSel}, SEL_F_ARGS];
+   
 % Select individuals from population
    SelCh = [];
    for irun = 1:SUBPOP,
-      FitnVSub = FitnV((irun-1)*Nind+1:irun*Nind);
-      ChrIx=feval(SEL_F, FitnVSub, NSel)+(irun-1)*Nind;
-      SelCh=[SelCh; Chrom(ChrIx,:)];
+      FitnVSub = FitnV((irun-1) * Nind+1:irun*Nind);
+      tempSelArgs{1} = FitnVSub;
+      ChrIx = feval(SEL_F, tempSelArgs{:}) + (irun-1)*Nind;
+      %ChrIx = feval(SEL_F, FitnVSub, NSel) + (irun-1)*Nind;
+      SelCh = [SelCh; Chrom(ChrIx,:)];
    end
  
-
+end
 % End of function

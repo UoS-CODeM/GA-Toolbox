@@ -1,3 +1,4 @@
+function NewChrIx = sus(FitnV, Nsel)
 % SUS.M          (Stochastic Universal Sampling)
 %
 % This function performs selection with STOCHASTIC UNIVERSAL SAMPLING.
@@ -20,8 +21,6 @@
 %             22.02.94     clean up, comments
 %             22.01.03     tested under MATLAB v6 by Alex Shenfield
 
-function NewChrIx = sus(FitnV,Nsel);
-
 % Identify the population size (Nind)
    [Nind,ans] = size(FitnV);
 
@@ -37,4 +36,4 @@ function NewChrIx = sus(FitnV,Nsel);
    NewChrIx = NewChrIx(shuf);
 
 
-% End of function
+end

@@ -81,18 +81,18 @@ function [ObjVal,t,x] = objdopi(Chrom,rtn_type);
    % if Dim variables, compute values of function
    elseif Nvar == Dim
       if method == 3,      % Convert transfer function to state space system
-         [Ai2, Bi2, Ci2, Di2] = tf2ss(1, [1 0 0]);
+         [Ai2 Bi2 Ci2 Di2] = tf2ss(1, [1 0 0]);
          t = TIMEVEC;
       end
       ObjVal = zeros(Nind,1);
       for indrun = 1:Nind
          steuerung = [TIMEVEC [Chrom(indrun,:)]'];
          if method == 2,
-            [t, x] = rk23('simdopi2',[TSTART TEND],XINIT,[1e-3;STEPSIMU;STEPSIMU],steuerung);
+            [t x] = rk23('simdopi2',[TSTART TEND],XINIT,[1e-3;STEPSIMU;STEPSIMU],steuerung);
          elseif method == 3,
-            [y, x] = lsim(Ai2, Bi2, Ci2, Di2, Chrom(indrun,:),TIMEVEC, XINIT);
+            [y x] = lsim(Ai2, Bi2, Ci2, Di2, Chrom(indrun,:),TIMEVEC, XINIT);
          else 
-            [t, x] = rk23('simdopi1',[TSTART TEND],[],[1e-3;STEPSIMU;STEPSIMU],steuerung);
+            [t x] = rk23('simdopi1',[TSTART TEND],[],[1e-3;STEPSIMU;STEPSIMU],steuerung);
          end
          % Calculate objective function, endvalues, trapez-integration for control vector
          ObjVal(indrun) = sum(XENDWEIGHT .* abs( x(size(x,1),:)' - XEND )) + ...
